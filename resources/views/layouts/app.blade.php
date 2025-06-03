@@ -27,43 +27,16 @@
             </div>
             
             <div class="d-flex align-items-center gap-3">
-                @auth
-                    <a href="{{ route('dashboard') }}" class="text-white text-decoration-none hover:text-gray-300">
-                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-                    </a>
-                    <a href="{{ route('section') }}" class="text-white text-decoration-none hover:text-gray-300">
-                        <i class="fas fa-clock me-2"></i> Session / Cookie
-                    </a>
-                    <a href="{{ route('eloquent') }}" class="text-white text-decoration-none hover:text-gray-300">
-                        <i class="fas fa-database me-2"></i> Some Statistic
-                    </a>
-                    <div class="dropdown">
-                        <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ Auth::user()->avatar_url }}" alt="Profile Photo" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li>
-                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                                    <i class="fas fa-user me-2"></i> Profile
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">
-                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                @else
-                    <a href="{{ route('login') }}" class="btn btn-outline-light">Login</a>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="btn btn-outline-light">Register</a>
-                    @endif
-                @endauth
+                <a href="{{ route('dashboard') }}" class="text-white text-decoration-none hover:text-gray-300">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+                <a href="{{ route('section') }}" class="text-white text-decoration-none hover:text-gray-300">
+                    <i class="fas fa-clock me-2"></i> Session / Cookie
+                </a>
+                <a href="{{ route('eloquent') }}" class="text-white text-decoration-none hover:text-gray-300">
+                    <i class="fas fa-database me-2"></i> Some Statistic
+                </a>
+                <x-language-switcher />
             </div>
         </nav>
     </header>
