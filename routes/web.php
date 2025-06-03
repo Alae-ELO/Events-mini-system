@@ -13,6 +13,8 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\EloquentController;
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {
@@ -101,3 +103,6 @@ Route::get('events/same_place', [StoreController::class, 'events_same_place'])->
 Route::get('/events/countbystore', [StoreController::class, 'countbystore'])->name('events.countbystore');
 Route::get('/store/value', [StoreController::class, 'storeValue'])->name('store.value');
 Route::get('/sotre/greater_than_lind', [StoreController::class, 'storeGreater_than_lind'])->name('sotre.greater_than_lind');
+
+
+Route::get('/eloquent', [EloquentController::class, 'index'])->middleware(['auth'])->name('eloquent');

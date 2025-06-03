@@ -28,8 +28,14 @@
             
             <div class="d-flex align-items-center gap-3">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="btn btn-outline-light">
+                    <a href="{{ route('dashboard') }}" class="text-white text-decoration-none hover:text-gray-300">
                         <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                    <a href="{{ route('section') }}" class="text-white text-decoration-none hover:text-gray-300">
+                        <i class="fas fa-clock me-2"></i> Session / Cookie
+                    </a>
+                    <a href="{{ route('eloquent') }}" class="text-white text-decoration-none hover:text-gray-300">
+                        <i class="fas fa-database me-2"></i> Some Statistic
                     </a>
                     <div class="dropdown">
                         <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
