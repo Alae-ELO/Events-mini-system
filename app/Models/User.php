@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'avatar',
     ];
 
     /**
@@ -65,5 +66,10 @@ class User extends Authenticatable
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'explorer_id');
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? asset('storage/avatars/' . $this->avatar) : asset('images/default-avatar.png');
     }
 }

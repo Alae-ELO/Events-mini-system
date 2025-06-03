@@ -6,15 +6,10 @@
         <h1 class="text-2xl font-bold">Events Management</h1>
         <div class="flex space-x-4">
             <a href="{{ route('event.create') }}" class="btn btn-primary">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
+
                 Create Event
             </a>
             <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
                 Back to Dashboard
             </a>
         </div>
@@ -24,7 +19,7 @@
         <div class="p-6">
             <div class="flex flex-wrap gap-4 justify-between items-center">
                 <div class="flex gap-4">
-                    <form action="{{ route('events-import') }}" method="POST" enctype="multipart/form-data" class="flex gap-2">
+                    <form action="{{ route('events.import') }}" method="POST" enctype="multipart/form-data" class="flex gap-2">
                         @csrf
                         <input type="file" name="import_file" class="form-control" accept=".xls,.xlsx,.csv" required>
                         <button type="submit" class="btn btn-outline-primary">
@@ -35,40 +30,34 @@
                         </button>
                     </form>
                 </div>
-                <div class="flex gap-4">
-                <a href="{{ route('events.export') }}" class="btn btn-outline-success">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Export the list
-                </a>
-                <a href="{{ route('events.print') }}" class="btn btn-outline-secondary" target="_blank">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                    </svg>
-                    Print the list
-                </a>
-                    
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('events.export') }}" class="btn btn-primary">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        Export
+                    </a>
+                    <a href="{{ route('events.print') }}" target="_blank" class="btn btn-primary">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                        </svg>
+                        Print the list
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    <div class='bg-white rounded-lg shadow-lg overflow-hidden mt-8'>
+    <div class='bg-white flex gap-4 justify-center items-center mt-8'>
 
-     <a href="{{ route('events.by.cat') }}" class="btn btn-outline-primary">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                    </svg>
+     <a href="{{ route('events.by.cat') }}" class="bg-pink-500  text-white px-4 py-2 rounded-md hover:bg-pink-600 transition-colors">
+
                     Filter by Category
                 </a>
-                <a href="{{ route('events.by.org') }}" class="btn btn-outline-primary">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
+                <a href="{{ route('events.by.org') }}" class="bg-pink-500  text-white px-4 py-2 rounded-md hover:bg-pink-600 transition-colors">
+
                     Filter by Organizer
                 </a>
-                
-        
+</div>
 
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="overflow-x-auto">

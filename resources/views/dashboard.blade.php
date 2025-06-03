@@ -1,39 +1,48 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5">
-    <h2 class="display-4 mb-4 text-center">Welcome to Event Management System</h2>
-    
-    <div class="d-flex justify-content-center gap-3 mb-5">
-        <a href="/events" class="btn bg-blue-500 btn-lg shadow-sm rounded-lg px-4 py-2 hover:bg-blue-900 text-white transition-all duration-300">List of Events</a>
-        <a href="/booking" class="btn bg-purple-500 btn-lg shadow-sm rounded-lg px-4 py-2 hover:bg-purple-900 text-white transition-all duration-300">List of Bookings</a>
-        <a href="/organizers" class="btn bg-green-500 btn-lg shadow-sm rounded-lg px-4 py-2 hover:bg-green-900 text-white transition-all duration-300">List of Organizers</a>
+<div class="container mx-auto py-8">
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-2xl font-bold">{{ __('dashboard.title') }}</h1>
+            <p class="text-gray-600">{{ __('dashboard.welcome') }}</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+                <a href="{{ route('dashboard', ['locale' => 'en']) }}" class="btn btn-sm {{ app()->getLocale() == 'en' ? 'btn-primary' : 'btn-outline-primary' }}">EN</a>
+                <a href="{{ route('dashboard', ['locale' => 'fr']) }}" class="btn btn-sm {{ app()->getLocale() == 'fr' ? 'btn-primary' : 'btn-outline-primary' }}">FR</a>
+                <a href="{{ route('dashboard', ['locale' => 'ar']) }}" class="btn btn-sm {{ app()->getLocale() == 'ar' ? 'btn-primary' : 'btn-outline-primary' }}">AR</a>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Events by Category</h5>
-                    <canvas id="categoryChart" height="300"></canvas>
-                </div>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <a href="{{ route('events.app') }}" class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+            <h2 class="text-xl font-semibold mb-2">Events</h2>
+            <p class="text-gray-600">Manage your events</p>
+        </a>
+        <a href="{{ route('booking.index') }}" class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+            <h2 class="text-xl font-semibold mb-2">Bookings</h2>
+            <p class="text-gray-600">View and manage bookings</p>
+        </a>
+        <a href="{{ route('organizers') }}" class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+            <h2 class="text-xl font-semibold mb-2">Organizers</h2>
+            <p class="text-gray-600">Manage event organizers</p>
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Events by Category</h2>
+            <canvas id="categoryChart"></canvas>
         </div>
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Events by Month</h5>
-                    <canvas id="monthlyChart" height="300"></canvas>
-                </div>
-            </div>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Events by Month</h2>
+            <canvas id="monthlyChart"></canvas>
         </div>
-        <div class="col-md-12 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Events by Organizer</h5>
-                    <canvas id="organizerChart" height="300"></canvas>
-                </div>
-            </div>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Events by Organizer</h2>
+            <canvas id="organizerChart"></canvas>
         </div>
     </div>
 </div>
@@ -41,138 +50,101 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let categoryChart, monthlyChart, organizerChart;
-
     // Initialize charts with empty data
-    function initializeCharts() {
-        // Category Chart
-        categoryChart = new Chart(document.getElementById('categoryChart'), {
-            type: 'pie',
-            data: {
-                labels: [],
-                datasets: [{
-                    data: [],
-                    backgroundColor: [
-                        '#FF6384',
-                        '#36A2EB',
-                        '#FFCE56',
-                        '#4BC0C0',
-                        '#9966FF',
-                        '#FF9F40'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
+    const categoryChart = new Chart(document.getElementById('categoryChart'), {
+        type: 'pie',
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#4BC0C0',
+                    '#9966FF'
+                ]
+            }]
+        }
+    });
+
+    const monthlyChart = new Chart(document.getElementById('monthlyChart'), {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Events',
+                data: [],
+                backgroundColor: '#36A2EB'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
                     }
                 }
             }
-        });
+        }
+    });
 
-        // Monthly Chart
-        monthlyChart = new Chart(document.getElementById('monthlyChart'), {
-            type: 'bar',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Number of Events',
-                    data: [],
-                    backgroundColor: '#36A2EB'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-
-        // Organizer Chart
-        organizerChart = new Chart(document.getElementById('organizerChart'), {
-            type: 'bar',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Number of Events',
-                    data: [],
-                    backgroundColor: '#4BC0C0'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
+    const organizerChart = new Chart(document.getElementById('organizerChart'), {
+        type: 'pie',
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#4BC0C0',
+                    '#9966FF',
+                    '#FF9F40',
+                    '#8AC24A',
+                    '#9C27B0',
+                    '#E91E63',
+                    '#2196F3'
+                ]
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        boxWidth: 15,
+                        padding: 15
                     }
                 }
             }
-        });
-    }
+        }
+    });
 
-    // Update charts with real data
-    function updateCharts(data) {
-        // Update Category Chart
-        categoryChart.data.labels = data.categories.map(item => item.name);
-        categoryChart.data.datasets[0].data = data.categories.map(item => item.count);
-        categoryChart.update();
-
-        // Update Monthly Chart
-        monthlyChart.data.labels = data.monthly.map(item => item.month);
-        monthlyChart.data.datasets[0].data = data.monthly.map(item => item.count);
-        monthlyChart.update();
-
-        // Update Organizer Chart
-        organizerChart.data.labels = data.organizers.map(item => item.name);
-        organizerChart.data.datasets[0].data = data.organizers.map(item => item.count);
-        organizerChart.update();
-    }
-
-    // Initialize charts
-    initializeCharts();
-
-    // Fetch real data from the API
+    // Fetch and update chart data
     fetch('/api/dashboard/charts')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            updateCharts(data);
+            // Update category chart
+            categoryChart.data.labels = data.categories.map(c => c.name);
+            categoryChart.data.datasets[0].data = data.categories.map(c => c.count);
+            categoryChart.update();
+
+            // Update monthly chart
+            monthlyChart.data.labels = data.monthly.map(m => m.month);
+            monthlyChart.data.datasets[0].data = data.monthly.map(m => m.count);
+            monthlyChart.update();
+
+            // Update organizer chart
+            organizerChart.data.labels = data.organizers.map(o => o.name);
+            organizerChart.data.datasets[0].data = data.organizers.map(o => o.count);
+            organizerChart.update();
         })
         .catch(error => {
             console.error('Error fetching chart data:', error);
-            // Show error message to user
-            const errorMessage = document.createElement('div');
-            errorMessage.className = 'alert alert-danger';
-            errorMessage.textContent = 'Failed to load chart data. Please try again later.';
-            document.querySelector('.container').prepend(errorMessage);
         });
-});
 </script>
 @endpush
 @endsection

@@ -24,6 +24,13 @@ class Event extends Model
         'organizer_id',
         'place_id',
         'category_id',
+        'picture'
+    ];
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'price' => 'decimal:2'
     ];
 
     public function organizer()

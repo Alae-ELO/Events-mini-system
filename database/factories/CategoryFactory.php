@@ -2,21 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 class CategoryFactory extends Factory
 {
-    protected $model = Category::class;
-
-    private static $usedNames = [];
-
-    public function definition()
+    public function definition(): array
     {
         $names = ['Sport', 'Musique', 'Art', 'Cuisine'];
+        $name = $this->faker->unique()->randomElement($names);
+        
         return [
-            'name' => $this->faker->randomElement($names)->unique(),
+            'name' => $name,
             'description' => $this->faker->sentence(),
         ];
     }

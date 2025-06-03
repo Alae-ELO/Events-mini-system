@@ -8,9 +8,22 @@
                 <div class="card-header">{{ __('Profile Information') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('profile.update') }}">
+                    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                         @csrf
                         @method('patch')
+
+                        <div class="mb-3">
+                            <label for="avatar" class="form-label">{{ __('Profile Photo') }}</label>
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <img src="{{ $user->avatar_url }}" alt="Profile Photo" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                                <input type="file" class="form-control @error('avatar') is-invalid @enderror" id="avatar" name="avatar" accept="image/*">
+                            </div>
+                            @error('avatar')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
 
                         <div class="mb-3">
                             <label for="name" class="form-label">{{ __('Name') }}</label>

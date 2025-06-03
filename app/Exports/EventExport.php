@@ -2,24 +2,24 @@
 
 namespace App\Exports;
 
+namespace App\Exports;
+
 use App\Models\Event;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class EventExport implements FromCollection, WithCustomStartCell, WithHeadings, ShouldAutoSize
+class EventExport implements FromCollection, WithCustomStartCell, WithHeadings, ShouldAutoSize, WithStyles
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
     public function collection()
     {
         $events = Event::with(['category', 'place', 'organizer'])->get();
-        $data = array();
-        foreach($events as $event) {
-            $data[] = array(
+
+        return collect($events->map(function ($event) {
+            return [
                 'id' => $event->id,
                 'title' => $event->title,
                 'description' => $event->description,
@@ -30,27 +30,15 @@ class EventExport implements FromCollection, WithCustomStartCell, WithHeadings, 
                 'category' => $event->category->name,
                 'place' => $event->place->name,
                 'organizer' => $event->organizer->name,
-            );
-        }
-        return collect($data);
+            ];
+        }));
     }
 
-    /**
-     * @return array
-     */
     public function headings(): array
     {
         return [
-            'ID',
-            'Title',
-            'Description',
-            'Start Date',
-            'End Date',
-            'Price',
-            'Capacity',
-            'Category',
-            'Place',
-            'Organizer'
+            'ID', 'Title', 'Description', 'Start Date', 'End Date',
+            'Price', 'Capacity', 'Category', 'Place', 'Organizer'
         ];
     }
 
@@ -61,47 +49,33 @@ class EventExport implements FromCollection, WithCustomStartCell, WithHeadings, 
 
     public function styles(Worksheet $sheet)
     {
-        // Style for headers
         $headerRange = 'A1:J1';
         $sheet->getStyle($headerRange)->applyFromArray([
-            'font' => [
-                'bold' => true,
-                'size' => 12,
-                'name' => 'Arial'
-            ],
+            'font' => ['bold' => true, 'size' => 12, 'name' => 'Arial'],
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => [
-                    'rgb' => 'E2E2E2'
-                ]
+                'startColor' => ['rgb' => 'E2E2E2']
             ],
             'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ]
+                'allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
             ],
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
             ]
         ]);
 
-        // Style for data cells
         $dataRange = 'A2:J' . ($sheet->getHighestRow());
         $sheet->getStyle($dataRange)->applyFromArray([
             'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ]
+                'allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]
             ],
             'alignment' => [
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ]
         ]);
 
-        // Auto-size columns
-        foreach(range('A','J') as $column) {
+        foreach (range('A', 'J') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
     }
 }
-

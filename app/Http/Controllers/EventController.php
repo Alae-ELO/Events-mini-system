@@ -164,16 +164,30 @@ class EventController extends Controller
     }
     public function print()
     {
-        // get the event with the name of events and the category name and the organizer name with elquent
-        $organizers = User::where('role', 'organizer')->get();
-        $events = Event::with(['category', 'place', $organizers])->get();
-        $data = [
-            'events' => $events 
-        ];
-        $mpdf = new Mpdf();
-        $html = view('events.print_pdf', $data)->render();
+        $events = Event::with(['category', 'place', 'organizer'])->get();
+        
+        // Create new PDF instance
+        $mpdf = new \Mpdf\Mpdf([
+            'margin_left' => 15,
+            'margin_right' => 15,
+            'margin_top' => 15,
+            'margin_bottom' => 15,
+            'margin_header' => 10,
+            'margin_footer' => 10
+        ]);
+
+        // Set document properties
+        $mpdf->SetTitle('Events List');
+        $mpdf->SetAuthor('Event Management System');
+        
+        // Generate HTML content
+        $html = view('events.print_pdf', compact('events'))->render();
+        
+        // Write HTML to PDF
         $mpdf->WriteHTML($html);
-        return $mpdf->Output('events.pdf', 'I'); // 'I' for inline display
+        
+        // Output PDF as download
+        return $mpdf->Output('events-list.pdf', 'D');
     }
 
     public function getChartData()

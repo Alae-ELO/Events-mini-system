@@ -25,10 +25,11 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     
-// section routes
-Route::get("/section", [DashboardController::class, 'section'])->name("section");
-Route::post("/saveCookie", [DashboardController::class, 'saveCookie'])->name("saveCookie");
-Route::post("/saveSession", [DashboardController::class, 'saveSession'])->name("saveSession");
+    // section routes
+    Route::get("/section", [DashboardController::class, 'section'])->name("section");
+    Route::post("/saveCookie", [DashboardController::class, 'saveCookie'])->name("saveCookie");
+    Route::post("/saveSession", [DashboardController::class, 'saveSession'])->name("saveSession");
+
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -56,10 +57,12 @@ Route::post("/saveSession", [DashboardController::class, 'saveSession'])->name("
     // Events by Organizer
     Route::get('/events-by-organizer', [EventController::class, 'eventsByOrganizer'])->name('events.by.org');
     Route::get('/events-by-organizer/{organizer}', [EventController::class, 'getEventsByOrganizer'])->name('events.filter.by.organizer');
-    Route::get('/events/export', [EventController::class, 'export'])->name('events.export');
-    Route::post('/events/import', [EventController::class, 'import'])->name('events.import');
+    
+    // Events Export/Import/Print
+    Route::get('/events-export', [EventController::class, 'export'])->name('events.export');
+    Route::post('/events-import', [EventController::class, 'import'])->name('events.import');
+    Route::get('/events-print', [EventController::class, 'print'])->name('events.print');
     Route::get('/api/dashboard/charts', [EventController::class, 'getChartData'])->name('dashboard.charts');
-    Route::get('/products/print', [EventController::class, 'print'])->name('events.print');
 
     // Explorer search API routes
     Route::prefix('api/explorers')->group(function () {

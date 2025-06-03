@@ -32,8 +32,8 @@
                         <i class="fas fa-tachometer-alt me-2"></i> Dashboard
                     </a>
                     <div class="dropdown">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ Auth::user()->name }}
+                        <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ Auth::user()->avatar_url }}" alt="Profile Photo" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li>

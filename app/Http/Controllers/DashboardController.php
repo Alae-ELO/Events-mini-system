@@ -6,11 +6,16 @@ use \App\Models\User;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->has('locale')) {
+            app()->setLocale($request->locale);
+            session()->put('locale', $request->locale);
+        }
         return view('dashboard');
     }
     public function events()
