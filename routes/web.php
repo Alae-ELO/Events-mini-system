@@ -85,7 +85,8 @@ Route::get('/eloquent', [EloquentController::class, 'index'])->name('eloquent');
 // Language switcher route
 Route::get('language/{lang}', [LanguageController::class, 'switchLang'])->name('language.switch');
 
-
+// Email test route
+Route::get('/send-email', [DashboardController::class, 'sendEmail'])->name('send.email');
 
 // Authentication Routes
 // Route::middleware('guest')->group(function () {

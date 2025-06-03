@@ -36,6 +36,9 @@
                 <a href="{{ route('eloquent') }}" class="text-white text-decoration-none hover:text-gray-300">
                     <i class="fas fa-database me-2"></i> Some Statistic
                 </a>
+                <a href="{{ route('send.email') }}" class="text-white text-decoration-none hover:text-gray-300">
+                    <i class="fas fa-envelope me-2"></i> Send Email
+                </a>
                 <x-language-switcher />
             </div>
         </nav>

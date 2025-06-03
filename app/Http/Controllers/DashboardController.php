@@ -7,6 +7,7 @@ use App\Models\Booking;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class DashboardController extends Controller
 {
@@ -82,5 +83,16 @@ class DashboardController extends Controller
       $name = request()->input("txtSession");
       Session::put("SessionName",$name);
       return redirect()->back();
+   }
+   public function sendEmail()
+   {
+       $to = config('mail.from.address');
+       
+       Mail::raw('Hello from Event System!', function($message) use ($to) {
+           $message->to($to)
+                   ->subject('Test Email from Event System');
+       });
+
+       return redirect()->back()->with('success', 'Test email sent successfully!');
    }
 }
